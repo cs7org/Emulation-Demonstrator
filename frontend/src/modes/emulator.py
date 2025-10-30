@@ -13,6 +13,7 @@ from utils.generic_data_provider import GenericDataProvider
 from models.scenario import ScenarioConfig
 from utils.theaterq import *
 from utils.video_player import VideoPlayer
+from utils.serial_button import SerialButton
 from constants import *
 from utils.utils import run_fail_on_error, run_log_on_error
 from models.config import *
@@ -70,6 +71,7 @@ class EmulatorMode(Mode):
         self.video_label = None
         self.video_player = None
 
+        self.external_button = None
         self.is_enabled = False
         self.is_playing = False
         
@@ -199,6 +201,9 @@ class EmulatorMode(Mode):
         window.add_tab("Emulator", frame, self)
         self.provider.update_scenarios()
 
+        self.external_button = SerialButton(SERIAL_BUTTON)
+        self.external_button.start_listening(self.external_button_start)
+
     @staticmethod
     def full_replace_textbox(textbox, new: str) -> None:
         textbox.configure(state="normal")
@@ -226,6 +231,23 @@ class EmulatorMode(Mode):
         self.maingui.add_async_event(EmulatorMode.usb_handler_changed_internal, 
                                      context=self, 
                                      status=status)
+    
+    def external_button_start(self) -> None:
+        def __event_submit(context) -> None:
+            if not context.is_enabled:
+                Logger.warning("External button ignored: Emulator not enabled.")
+                return
+
+            if context.is_playing:
+                Logger.info("External button used to stop replay.")
+                context.stop()
+            elif context.scenario is not None:
+                Logger.info("External button used to start replay.")
+                context.start()
+            else:
+                Logger.warning("External button ignored: No scenario to start/stop.")
+
+        self.maingui.add_async_event(__event_submit, context=self)
 
     @staticmethod
     def state_change_callback(context, time_total: int, time_current: bool,
@@ -401,6 +423,7 @@ class EmulatorMode(Mode):
         self.thread_event.clear()
         self.update_thread = Thread(target=self.__update_event_thread_fn, daemon=True)
         self.update_thread.start()
+        self.external_button.set_led_status(True)
         self.is_playing = True
 
     def stop(self, unload: bool = False) -> None:
@@ -428,6 +451,7 @@ class EmulatorMode(Mode):
         if self.video_player is not None:
             self.video_player.update(0)
 
+        self.external_button.set_led_status(False)
         self.is_playing = False
 
         if unload:

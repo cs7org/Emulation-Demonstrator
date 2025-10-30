@@ -3,3 +3,4 @@ watchdog
 matplotlib
 opencv-python
 pillow
+pyserial

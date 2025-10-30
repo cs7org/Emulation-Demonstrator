@@ -5,6 +5,10 @@ The Raspberry Pi is connected between two real computers, replaying link charact
 A simple GUI allows for easy control of the tool.
 The tool allows performing end-to-end tests of different (non-online) applications with humans-in-the-loop on the real computers, e.g., video streaming.
 
+> [!NOTE]
+> Version of LNdW (Lange Nacht der Wissenschaften) 2025 with support for an external button with an LED (serial interface via USB). 
+> The button can be used to stop/start the emulation playback, the LED shows if an emulation playback is running.
+
 ![Real Setup with extended Configurations (Real Paths)](assets/setup.png "Real Setup with extended Configurations (Real Paths)")
 ![Emulator Frontend with the Emulator only setup](assets/window.png "Emulator Frontend with the Emulator only setup")
 

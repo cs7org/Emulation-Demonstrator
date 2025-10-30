@@ -6,3 +6,5 @@ GIT_VERSION="%%gitversion%%"
 
 PUBLIC_NETNS_NAME="public"
 NETNS_RIGHT_BRIDGE_NAME="right-br"
+
+SERIAL_BUTTON="/dev/ttyACM0"
