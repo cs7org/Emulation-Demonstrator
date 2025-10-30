@@ -1,0 +1,10 @@
+{
+    "name": "Rio to Petersburg - Kuiper Dropout",
+    "description": "Rio de Janeiro <-> Saint Petersburg via Kuiper constellation\n34 orbits à 34 satellites = 1156 satellites, 630km height, 51,9° orbit inclination, 4 ISL links\n100 ground stations with 10,000 background traffic flows\n50Mbps GSL and ISL link capacities\nExtra Feature: Temporary connection loss due to low elevation",
+    "trace": {
+        "format": "extended",
+        "forward": "forward-rio-petersburg-kuiper-dropout.csv",
+        "return": "return-rio-petersburg-kuiper-dropout.csv"
+    },
+    "video": null
+}

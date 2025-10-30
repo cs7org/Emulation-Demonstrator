@@ -1,0 +1,22 @@
+# METABEGIN
+# X-Env-Layer-Name: xserver
+# X-Env-Layer-Category: app
+# X-Env-Layer-Desc: Basic X11 server installation
+# X-Env-Layer-Version: 1.0.0
+# METAEND
+---
+name: xserver
+mmdebstrap:
+  packages:
+    - xserver-xorg-core
+    - xorg
+    - v4l-utils
+    - xcursor-themes
+  customize-hooks:
+    - cp files/xserver/xinitrc $1/home/emulator/.xinitrc
+    - cp files/xserver/xorg.service $1/etc/systemd/system/xorg.service
+    - cp files/xserver/Xwrapper.config $1/etc/X11/Xwrapper.config
+    - cp files/xserver/99-vc4.conf $1/etc/X11/xorg.conf.d/99-vc4.conf
+    - cp files/xserver/99-com.rules $1/etc/udev/rules.d/99-com.rules
+    - chroot $1 usermod -aG tty emulator
+    - $BDEBSTRAP_HOOKS/enable-units "$1" xorg

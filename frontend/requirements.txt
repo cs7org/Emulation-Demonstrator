@@ -1,0 +1,5 @@
+tk
+watchdog
+matplotlib
+opencv-python
+pillow

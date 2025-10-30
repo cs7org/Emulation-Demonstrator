@@ -1,0 +1,13 @@
+# METABEGIN
+# X-Env-Layer-Name: networking
+# X-Env-Layer-Category: app
+# X-Env-Layer-Desc: systemd-networkd and misc setup
+# X-Env-Layer-Version: 1.0.0
+# METAEND
+---
+name: networking
+mmdebstrap:
+  packages:
+    - iproute2
+  customize-hooks:
+    - cp files/networking/99-dhcp-d.network $1/etc/systemd/network/99-dhcp-d.network

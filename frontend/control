@@ -1,0 +1,8 @@
+Package: emulator-frontend
+Version: 1.0-0
+Section: base
+Priority: optional
+Architecture: arm64
+Depends: python3, python3-tk, python3-watchdog, tcl-awthemes, python3-opencv, python3-matplotlib, python3-pil, iproute2, vlan, iptables, bridge-utils, conntrack
+Maintainer: Martin Ottens <martin.ottens@fau.de>
+Description: Emulation Demonstrator Frontend Components

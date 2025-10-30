@@ -1,0 +1,84 @@
+stages:
+  - prepare
+  - build
+  - image
+
+# Create a shell runner with the user 'gitlab-runner' and a home directory.
+# Disk images could be exported as artifacts, but because of their size this
+# might not be possible. Therefore, they are stored locally in the GitLab 
+# runner's home directory
+variables:
+  RPI_IMAGE_GEN_PATH: /home/gitlab-runner/rpi-image-gen
+  IMAGE_STORAGE_PATH: /home/gitlab-runner/images
+
+# The build container will be exported to the gitlab-runner user's podman
+# local image store. The shell runner is therefore 'stateful' - in this 
+# configuration, only one runner is supported to accept jobs from this 
+# pipeline. Manual step, once done, this is only required after upstream 
+# kernel updates.
+build-dep-container:
+  stage: prepare
+  when: manual
+  needs: []
+  tags: [arm64, shell]
+  script:
+    - ${RPI_IMAGE_GEN_PATH}/rpi-image-gen build -S infra/build-container/. -c build-container.yaml
+    - mv work/mydev/build-container.tar.gz ${IMAGE_STORAGE_PATH}/build-container.tar.gz
+    - podman import ${IMAGE_STORAGE_PATH}/build-container.tar.gz builder:latest
+  after_script:
+    - podman image prune || true
+    - ${RPI_IMAGE_GEN_PATH}/rpi-image-gen clean -S infra/build-container/. -c build-container.yaml
+
+build-theaterq:
+  stage: build
+  needs: []
+  tags: [arm64, shell]
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+    GIT_SUBMODULE_DEPTH: 2
+  script:
+    - podman run --rm -v $(pwd)/infra/theaterq:/work builder:latest make -C /work prepare all
+  artifacts:
+    name: "TheaterQ LKM + Plugins .deb Package"
+    paths:
+      - ./infra/theaterq/theaterq.deb
+
+# Architecture-agnostic & stateless build, can be executed on other runners.
+build-frontend:
+  stage: build
+  needs: []
+  tags: []
+  image: debian:latest
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+    GIT_SUBMODULE_DEPTH: 1
+  before_script:
+    - apt update && apt install -y make
+  script:
+    - sed -i "s/%%gitversion%%/${CI_COMMIT_SHORT_SHA}@${CI_COMMIT_REF_SLUG}/g" ./frontend/src/config.py
+    - cat ./frontend/src/config.py
+    - make -C ./frontend all
+  artifacts:
+    name: "Emulation Demonstrator Frontend .deb Package"
+    paths:
+      - ./frontend/frontend.deb
+
+generate-image:
+  stage: image
+  needs:
+    - job: build-theaterq
+      artifacts: true
+    - job: build-frontend
+      artifacts: true
+  tags: [arm64, shell]
+  before_script:
+    - cp infra/theaterq/theaterq.deb image/files/packages/.
+    - cp frontend/frontend.deb image/files/packages/.
+  script:
+    - ${RPI_IMAGE_GEN_PATH}/rpi-image-gen build -S image/. -c emulation-demonstrator.yaml
+    - mv work/deploy-*/emulation-demonstrator.img ${IMAGE_STORAGE_PATH}/emulation-demonstrator-${CI_COMMIT_SHORT_SHA}.img
+    - mv work/deploy-*/emulation-demonstrator.img.sparse ${IMAGE_STORAGE_PATH}/emulation-demonstrator-${CI_COMMIT_SHORT_SHA}.img.sparse
+  after_script:
+    - ${RPI_IMAGE_GEN_PATH}/rpi-image-gen clean -S image/. -c emulation-demonstrator.yaml
+    - bash -c "ls -tp ${IMAGE_STORAGE_PATH}/emulation-demonstrator-*.img | tail -n +6 | xargs -r rm --" || true
+    - bash -c "ls -tp ${IMAGE_STORAGE_PATH}/emulation-demonstrator-*.img.sparse | tail -n +6 | xargs -r rm --" || true

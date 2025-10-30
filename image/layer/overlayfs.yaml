@@ -1,0 +1,18 @@
+# METABEGIN
+# X-Env-Layer-Name: overlayfs
+# X-Env-Layer-Category: app
+# X-Env-Layer-Desc: Overlayfs for root fs
+# X-Env-Layer-Version: 1.0.0
+# METAEND
+---
+name: overlayfs
+mmdebstrap:
+  packages:
+    - busybox-static
+    - overlayroot
+  customize-hooks:
+    - |-
+      if [ "$IGconf_image_readonly" = true ]; then
+        chroot $1 sed -i 's/overlayroot=""/overlayroot="tmpfs:recurse=0"/' /etc/overlayroot.conf
+      fi
+    - cp files/overlayfs/resizepart_once $1/etc/init.d/resizepart_once && chmod +x $1/etc/init.d/resizepart_once && chroot $1 update-rc.d resizepart_once defaults

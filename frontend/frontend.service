@@ -1,0 +1,17 @@
+[Unit]
+Description=Start Emulation Demonstrator Frontend
+Wants=xorg.service
+
+[Service]
+User=emulator
+Group=emulator
+WorkingDirectory=/usr/local/bin/frontend/
+#ExecStart=python3 /usr/local/bin/frontend/main.py -m extended /etc/emulator/config.json
+ExecStart=python3 /usr/local/bin/frontend/main.py -m normal /etc/emulator/config.json
+Restart=always
+RestartSec=5
+RestartMode=direct
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=multi-user.target

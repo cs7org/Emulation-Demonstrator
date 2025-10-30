@@ -1,0 +1,32 @@
+{
+    "general": {
+        "left_endpoint_ip": "172.16.1.2",
+        "right_endpoint_ip": "172.16.2.2",
+        "left_interface_address": "172.16.1.1/24",
+        "right_interface_address": "172.16.2.1/24"
+    },
+    "extended": {
+        "left_vlan": 20,
+        "right_vlan": 21,
+        "public_interface": {
+            "address": "<<Public IP with Subnet>>",
+            "gateway": "<<Public Gateway>>",
+            "vlan": 10
+        },
+        "right_netns_address": "172.16.2.100/24",
+        "configs": [
+            {
+                "name": "Real Network 1",
+                "vlan": 11,
+                "address": null,
+                "gateway": null
+            },
+            {
+                "name": "Real Network n",
+                "vlan": 12,
+                "address": null,
+                "gateway": null
+            }
+        ]
+    }
+}

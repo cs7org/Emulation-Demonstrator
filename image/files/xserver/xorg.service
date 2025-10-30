@@ -1,0 +1,17 @@
+[Unit]
+Description=Start X at boot with black screen
+After=multi-user.target
+
+[Service]
+User=emulator
+Group=emulator
+ExecStart=/usr/bin/startx
+Restart=always
+Environment=DISPLAY=:0
+StandardOutput=syslog
+StandardError=syslog
+#StandardOutput=null
+#StandardError=null
+
+[Install]
+WantedBy=multi-user.target

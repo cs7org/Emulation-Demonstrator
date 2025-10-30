@@ -1,0 +1,31 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          resizepart_once
+# Required-Start:
+# Required-Stop:
+# Default-Start: 3
+# Default-Stop:
+# Short-Description: Initially resizes the persistent storage
+# Description:
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+    start)
+        log_daemon_msg "Starting resizepart_once" &&
+        partition=$(findmnt -no SOURCE /)
+        device=$(lsblk -no pkname $partition)
+        partnum=$(echo $partition | grep -oE '[0-9]+$')
+        echo yes | parted /dev/$device ---pretend-input-tty resizepart $partnum 100%
+        resize2fs $partition
+        this_script=$(basename "$0")
+        update-rc.d $this_script remove &&
+        rm /etc/init.d/$this_script &&
+        log_end_msg $?
+        ;;
+    *)
+        echo "Usage: $0 start" >&2
+        exit 3
+        ;;
+esac

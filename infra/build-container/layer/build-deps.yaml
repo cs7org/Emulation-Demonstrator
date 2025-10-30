@@ -1,0 +1,23 @@
+# METABEGIN
+# X-Env-Layer-Name: build-deps
+# X-Env-Layer-Category: app
+# X-Env-Layer-Desc: Some build tools used to build LKM and iproute2
+#  plugins for later use.
+# METAEND
+---
+mmdebstrap:
+  packages:
+    - linux-headers-generic
+    - build-essential
+    - gcc
+    - make
+    - git
+    - autoconf
+    - automake
+    - libtool
+    - pkg-config
+    - wget
+    - bash
+    - ca-certificates
+    - bison
+    - flex

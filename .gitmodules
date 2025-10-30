@@ -1,0 +1,9 @@
+[submodule "infra/theaterq/theaterq"]
+	path = infra/theaterq/theaterq
+	url = https://github.com/cs7org/TheaterQ.git
+[submodule "frontend/src/awthemes-10.4.0"]
+	path = frontend/src/awthemes-10.4.0
+	url = https://github.com/bll123/tcl-awthemes.git
+[submodule "infra/rpi-image-gen"]
+	path = infra/rpi-image-gen
+	url = https://github.com/raspberrypi/rpi-image-gen.git

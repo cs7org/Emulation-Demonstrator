@@ -1,0 +1,22 @@
+# METABEGIN
+# X-Env-Layer-Name: emulator-layer
+# X-Env-Layer-Category: app
+# X-Env-Layer-Desc: Layer for custom emulator image dependencies.
+# X-Env-Layer-Version: 1.0.0
+# X-Env-Layer-Requires: overlayfs,
+#  xserver,
+#  automount,
+#  networking
+# 
+# METAEND
+---
+name: emulator
+mmdebstrap:
+  packages:
+    - iproute2
+  customize-hooks:
+    - mkdir -p $1/tmp/debs && cp -a files/packages/*.deb $1/tmp/debs
+    - chroot $1 sh -c "apt install -y /tmp/debs/theaterq.deb"
+    - chroot $1 sh -c "apt install -y /tmp/debs/frontend.deb"
+  cleanup-hooks:
+    - rm -rf $1/tmp/deps

@@ -1,0 +1,7 @@
+[Unit]
+Description=USB automount for %I
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/usb-automount.sh %I

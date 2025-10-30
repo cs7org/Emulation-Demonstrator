@@ -1,0 +1,16 @@
+# METABEGIN
+# X-Env-Layer-Name: automount
+# X-Env-Layer-Category: app
+# X-Env-Layer-Desc: USB device automount manager
+# X-Env-Layer-Version: 1.0.0
+# METAEND
+---
+name: automount
+mmdebstrap:
+  packages:
+    - udisks2
+    - pmount
+  customize-hooks:
+    - cp files/automount/usb-automount.sh $1/usr/local/bin/usb-automount.sh && chmod +x $1/usr/local/bin/usb-automount.sh
+    - cp files/automount/99-usb-automount.rules $1/etc/udev/rules.d/99-usb-automount.rules
+    - cp files/automount/usb-automount@.service $1/etc/systemd/system/usb-automount@.service

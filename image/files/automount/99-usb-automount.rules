@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEMS=="usb", KERNEL=="sd[a-z][0-9]", TAG+="systemd", ENV{SYSTEMD_WANTS}="usb-automount@%k.service"

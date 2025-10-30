@@ -1,0 +1,24 @@
+device:
+  layer: rpi5
+  hostname: emulation-demonstrator
+  user1: emulator
+  user1pass: Emulator1!
+
+include:
+  file: trixie-minbase.yaml
+
+image:
+  layer: image-rpios
+  boot_part_size: 200%
+  root_part_size: 120%
+  name: emulation-demonstrator
+  readonly: false
+
+locale:
+  default: en_GB.UTF-8
+  keyboard_keymap: de
+  keyboard_layout: German (DE)
+  timezone: Europe/Berlin
+
+layer:
+  custom: emulator-layer

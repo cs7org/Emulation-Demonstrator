@@ -1,0 +1,10 @@
+{
+    "name": "Boston to Paris - Kuiper Handover",
+    "description": "Boston <-> Paris via Kuiper constellation\n34 orbits à 34 satellites = 1156 satellites, 630km height, 51.9° orbit inclination, 4 ISL links\n100 ground stations with 10,000 background traffic flows\n50Mbps GSL and ISL link capacities\nExtra Feature: 1000ms packet loss during handover",
+    "trace": {
+        "format": "extended",
+        "forward": "forward-boston-paris-kuiper-handover.csv",
+        "return": "return-boston-paris-kuiper-handover.csv"
+    },
+    "video": null
+}

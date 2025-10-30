@@ -1,0 +1,10 @@
+samples/scenarios/return-rio-petersburg-kuiper-dropout.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/forward-boston-paris-kuiper-handover.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/forward-boston-paris-kuiper-sync.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/forward-boston-paris-starlink-handover.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/forward-boston-paris-telesat-handover.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/forward-rio-petersburg-kuiper-dropout.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/return-boston-paris-kuiper-handover.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/return-boston-paris-telesat-handover.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/return-boston-paris-kuiper-sync.csv filter=lfs diff=lfs merge=lfs -text
+samples/scenarios/return-boston-paris-starlink-handover.csv filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,11 @@
+target:
+  context: mydev
+
+artefact:
+  target_name: build-container.tar.gz
+
+include:
+  file: trixie-minbase.yaml
+
+layer:
+  essential: build-deps

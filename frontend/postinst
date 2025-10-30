@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+sysctl -w net.ipv4.ip_forward=1 || true
+sysctl -w net.ipv4.conf.default.rp_filter=0 || true
+sysctl -w net.ipv4.conf.all.rp_filter=0 || true
+echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-network.conf
+echo "net.ipv4.conf.default.rp_filter=0" >> /etc/sysctl.d/99-network.conf
+echo "net.ipv4.conf.all.rp_filter=0" >> /etc/sysctl.d/99-network.conf 
+
+systemctl daemon-reload || true
+systemctl enable frontend.service
