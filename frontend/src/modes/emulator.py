@@ -551,11 +551,21 @@ class EmulatorMode(Mode):
         run_log_on_error(f"ip addr del {config.general.left_interface_address} dev {interface_left}", sudo=True, dryrun=dryrun, log_debug=True)
         run_log_on_error(f"ip link set down dev {interface_right}", sudo=True, dryrun=dryrun, log_debug=True)
         run_log_on_error(f"ip link set down dev {interface_left}", sudo=True, dryrun=dryrun, log_debug=True)
+        run_log_on_error(f"ip link set down dev {BRIDGE_MODE_BRIDGE_NAME}", sudo=True, dryrun=dryrun, log_debug=True)
+        run_log_on_error(f"brctl delbr {BRIDGE_MODE_BRIDGE_NAME}", sudo=True, dryrun=dryrun, log_debug=True)
 
     @staticmethod
-    def config_interfaces(config: FullConfig, interface_right: str, 
-                          interface_left: str, dryrun: bool = False) -> None:
-        run_fail_on_error(f"ip addr add {config.general.right_interface_address} dev {interface_right}", sudo=True, dryrun=dryrun)
-        run_fail_on_error(f"ip addr add {config.general.left_interface_address} dev {interface_left}", sudo=True, dryrun=dryrun)
+    def config_interfaces(config: FullConfig, interface_right: str, interface_left: str, 
+                          as_bridge: bool = False, dryrun: bool = False) -> None:
+        
+        if not as_bridge:
+            run_fail_on_error(f"ip addr add {config.general.right_interface_address} dev {interface_right}", sudo=True, dryrun=dryrun)
+            run_fail_on_error(f"ip addr add {config.general.left_interface_address} dev {interface_left}", sudo=True, dryrun=dryrun)
+        else:
+            run_fail_on_error(f"brctl addbr {BRIDGE_MODE_BRIDGE_NAME}", sudo=True, dryrun=dryrun)
+            run_fail_on_error(f"brctl addif {BRIDGE_MODE_BRIDGE_NAME} {interface_left}", sudo=True, dryrun=dryrun)
+            run_fail_on_error(f"brctl addif {BRIDGE_MODE_BRIDGE_NAME} {interface_right}", sudo=True, dryrun=dryrun)
+            run_fail_on_error(f"ip link set up dev {BRIDGE_MODE_BRIDGE_NAME}", sudo=True, dryrun=dryrun)
+        
         run_fail_on_error(f"ip link set up dev {interface_right}", sudo=True, dryrun=dryrun)
         run_fail_on_error(f"ip link set up dev {interface_left}", sudo=True, dryrun=dryrun)

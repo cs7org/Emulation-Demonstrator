@@ -56,7 +56,7 @@ def clean(config: FullConfig, debug: bool = False) -> None:
 
 
 def main(config: FullConfig, debug: bool = False, verbose: bool = False, 
-         mode: OperationMode = OperationMode.NORMAL) -> None:
+         mode: OperationMode = OperationMode.ROUTED) -> None:
     root = tk.Tk()
     window = EmulationDemonstrator(root, debug)
     Logger.set_logger(window, root, verbose)
@@ -75,9 +75,11 @@ def main(config: FullConfig, debug: bool = False, verbose: bool = False,
         Logger.error(f"Unhandeled exception during interface cleanup: {ex}")
 
 
-    if mode == OperationMode.NORMAL:
+    if mode == OperationMode.ROUTED or mode == OperationMode.BRIDGED:
         try:
-            EmulatorMode.config_interfaces(config, RIGHT_INTERFACE, LEFT_INTERFACE, dryrun=debug)
+            EmulatorMode.config_interfaces(config, RIGHT_INTERFACE, LEFT_INTERFACE, 
+                                           as_bridge=(mode == OperationMode.BRIDGED), 
+                                           dryrun=debug)
         except Exception as ex:
             Logger.critical(f"Unable to set up interfaces: {ex}")
             window.run_mainloop()
@@ -129,7 +131,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="Emulation Demonstrator")
     parser.add_argument("--debug", "-d", action="store_true", help="Local debug mode")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose log mode")
-    parser.add_argument("--mode", "-m", type=str, choices=[str(OperationMode.NORMAL), str(OperationMode.EXTENDED)],
+    parser.add_argument("--mode", "-m", type=str, choices=[str(OperationMode.BRIDGED), str(OperationMode.ROUTED), str(OperationMode.EXTENDED)],
                         required=True, help="Select operation mode for demonstrator")
     parser.add_argument("--clean", "-c", action="store_true", help="Clean interfaces and exit")
     parser.add_argument("CONFIG", type=str, help="Path to config.json")

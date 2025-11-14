@@ -28,13 +28,26 @@ The Emulation Demonstrator is primarily intended for the use without real networ
 After changing the config `frontend/config.json`, the disk image needs to be rebuilt. 
 It is also possible to mount the *ROOT* partition of the SD card on another computer to change the config.
 The *ROOT* partition is mounted read-only (overlayfs) while the emulator is started, therefore no persistent changes on the running system are easily possible. 
-Please note that both setup currently only support IPv4.
+Please note that the routed and extended setups currently only support IPv4.
 
-## Simple Setup (Emulator Only)
-![Simple Setup Schematic](assets/simple_setup.png "Simple Setup Schematic")
+## Bridged Setup (Emulator Only)
+![Bridged Setup Schematic](assets/bridged_setup.png "Bridged Setup Schematic")
 
-The simple network setup allows playing back Trace Files between two computers. 
-For this, neither network switch nor VLANs are required.
+To enable this setup change the file `frontend/frontend.service` as described by the comment for 'bridged setup' in this file.
+
+The bridged network setup allows playing back Trace Files between two computers in a (from a layer 3+ perspective) way.
+For this, neither a network switch nor VLANs are required.
+Connect both computers as shown above and assign IP addresses in the same subnet, the emulator will act as a layer 3 network switch.
+
+HDMI-1 and HDMI-2 of the emulator will output the emulator frontend at *1080x1920* shortly after booting.
+
+## Routed Setup (Emulator Only)
+![Routed Setup Schematic](assets/routed_setup.png "Routed Setup Schematic")
+
+To enable this setup change the file `frontend/frontend.service` as described by the comment for 'routed setup' in this file.
+
+The routed network setup allows playing back Trace Files between two computers. 
+For this, neither a network switch nor VLANs are required.
 Connect both computers as shown above and perform the following manual configuration:
 - **Left computer**: Hosts the Client software, IP: *172.16.1.2/24*, Gateway: *172.16.1.1*
 - **Right computer**: Hosts the Server software, IP: *172.16.2.2/24*, Gateway: *172.16.2.1*
@@ -46,7 +59,7 @@ HDMI-1 and HDMI-2 of the emulator will output the emulator frontend at *1080x192
 ## Extended Setup (Emulator + Real Network Paths)
 ![Extended Setup Schematic](assets/extended_setup.png "Extended Setup Schematic")
 
-This setup extends the simple setup and allows integrating real network paths.
+This setup extends the routed setup and allows integrating real network paths.
 In this case, both network interfaces of the Raspberry Pi will be used in VLAN trunk mode.
 Basically, the Raspberry Pi virtually connects the public IP, the Internet, to the right computer and the selected real path (e.g., a satellite modem) to the left computer.
 Traffic is routed from the left computer to the public IP via the real path gateway and the Internet, and is ultimately received by the right computer.

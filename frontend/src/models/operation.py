@@ -2,7 +2,8 @@ from enum import Enum
 
 
 class OperationMode(Enum):
-    NORMAL = "normal"
+    BRIDGED = "bridged"
+    ROUTED = "routed"
     EXTENDED = "extended"
 
     def __init__(self, typename: str):
