@@ -202,7 +202,7 @@ pip install -r requirements.txt
 Start the frontend in debug mode with verbose logging. During debug mode, sample scenarios are loaded, and no commands are executed:
 ```bash
 cd frontend/src
-python3 -m {normal|exetended} -v -d ../config.json
+python3 -m {bridged|routed|extended} -v -d ../config.json
 # If the application does not stop: CRTL+Z, kill -9 %%
 ```
 
